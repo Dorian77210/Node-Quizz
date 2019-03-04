@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
+app.set('view engine', 'ejs');
 //configuration of the headers
 
 
@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 const userRoutes = require('./api/routes/users');
 const quizzRoutes = require('./api/routes/quizz');
 const questionsRoutes = require('./api/routes/questions');
+const homeController = require('./api/routes/home');
 
 // Connect to database
 mongoose.connect(
@@ -46,6 +47,10 @@ app.use('/quizz', quizzRoutes);
 
 // Use routes which begin by /question
 app.use('/questions', questionsRoutes);
+
+app.use('/', homeController);
+
+app.use(express.static('public'));
 
 // Errors handling requests
 app.use((req, res, next) => {
