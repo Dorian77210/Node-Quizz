@@ -4,6 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
+
+exports.signup_get = (req, res, next) => {
+    res.render('index');
+}
 exports.signup = (req, res, next) => {
     //check if the email is available
     User.where('email')
@@ -12,16 +16,19 @@ exports.signup = (req, res, next) => {
         .then(user => {
             if(user.length >= 1) {
                 //conflict status
-                res.status(409).json({
-                    message: 'The email ' + req.body.email + ' is already used by another user'
+                return res.status(409).json({
+                    content: 'The email ' + req.body.email + ' is already used by another user',
+                    errorStatus: 409,
+                    title: 'Problem with mail'
                 });
             } else {
              // create an hash of the password given by the user
                 bcrypt.hash(req.body.password, 10, (error, hash) => {
                     if(error) {
-                        res.status(404).json({
-                            error: error,
-                            reason: "Error during the hashing of the password"
+                        return res.status(404).json({
+                            content: "Error of the server. Please retry after few moments",
+                            title: "Server error",
+                            errorStatus: 404
                         });
                     } else {
                         const user = new User({
@@ -35,11 +42,17 @@ exports.signup = (req, res, next) => {
 
                         user.save()
                             .then(doc => {
-                                res.status(200).json({message: "The user is successfully created"});
+                                return res.status(200).json({
+                                    title: "Success !",
+                                    content: "Your account is successfully created !"
+                                });
                             })
                             .catch(error => {
                                 console.log(error);
-                                res.status(500).json({error: error});
+                                return res.status(500).json({
+                                    error: error,
+                                    errorStatus: 500
+                                });
                             });
                     }
                 });
@@ -47,6 +60,9 @@ exports.signup = (req, res, next) => {
         })
 }
 
+exports.signin_get = (req, res, next) => {
+    res.render('index');
+}
 exports.signin = (req, res, next) => {
     const login = req.body.email;
     const password = req.body.password;

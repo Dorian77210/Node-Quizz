@@ -25,6 +25,7 @@ exports.question_creation = (req, res, next) => {
 }
 
 exports.question_get_all = (req, res, next) => {
+    console.log('okok');
     Question.find()
             .exec()
             .then(docs => {
@@ -43,10 +44,10 @@ exports.question_get_all = (req, res, next) => {
                         }
                     }),
                 }
-                res.status(200).json(response);
+                return res.status(200).json(response);
             })
             .catch(error => {
-                res.status(500).json({error: error});
+                return res.status(500).json({error: error});
             });
 }
 

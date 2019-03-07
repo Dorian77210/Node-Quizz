@@ -3,7 +3,7 @@ const router = express.Router();
 
 const QuestionController = require('../controllers/questions');
 
-router.get('/', (req, res, next) => {
+router.get('/home', (req, res, next) => {
     res.render('index');
 });
 
