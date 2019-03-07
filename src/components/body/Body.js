@@ -1,6 +1,7 @@
 import React from 'react';
 import BodyHome from './BodyHome';
 import BodySignup from './BodySignup';
+import BodySignin from './BodySignin';
 
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
@@ -15,11 +16,9 @@ class Body extends React.Component {
     }
 
     componentWillUnmout() {
-        console.log("toto");
     }
 
     componentWillReceiveProps(nextProps){
-        console.log("toto");
      }
 
 
@@ -29,6 +28,7 @@ class Body extends React.Component {
                 <Switch>
                     <Route exact path="/home" component={BodyHome}/>
                     <Route exact path="/users/signup" component={BodySignup}/>
+                    <Route exact path="/users/signin" component={BodySignin}/>
                 </Switch>
             </div>            
         );
