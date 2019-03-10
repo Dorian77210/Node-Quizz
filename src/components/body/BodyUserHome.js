@@ -23,12 +23,12 @@ class BodyUserHome extends React.Component {
     }
 
     componentWillMount() {
+
          //retrieve the quizzs
          axios.get('/users/quizz/')
              .then(res => {
                  this.setState( {loading: false} );
                  const data = res.data;
-                 console.log(data);
                  if(data.count == 0) {
                      this.setState({
                          quizz: 'No quizz available',

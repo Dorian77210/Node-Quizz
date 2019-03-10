@@ -3,18 +3,19 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const session = require('express-session');
+const session = require('cookie-session');
 
 // App configuration
+app.set('trust proxy', 1) // trust first proxy
+
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(session({
-    secret: 'Node Quizz',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false, maxAge: 3600000 * 24, secure: false }
-  }));
+    name: 'session',
+    keys: ['secretKey'],
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}));
 
 app.set('view engine', 'ejs');
 
@@ -45,6 +46,9 @@ mongoose.connect(
 //     }
 // })
 
+
+
+app.use('/', homeController);
 // Use routes which begin by /users
 app.use('/users', userRoutes);
 
@@ -53,8 +57,6 @@ app.use('/users/quizz', quizzRoutes);
 
 // Use routes which begin by /question
 app.use('/questions', questionsRoutes);
-
-app.use('/', homeController);
 
 app.use(express.static('public'));
 

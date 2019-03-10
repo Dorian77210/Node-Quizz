@@ -2,7 +2,7 @@ import React from 'react';
 import Body from './body/Body';
 import Header from './header/Header';
 
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 
 class App extends React.Component {
     
@@ -28,12 +28,12 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <BrowserRouter>
+                <HashRouter>
                     <div>
                         {this.state.header}
                         {this.state.body}
                     </div>
-                </BrowserRouter>
+                </HashRouter>
             </div>
         )
     }
