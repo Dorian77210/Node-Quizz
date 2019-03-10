@@ -16,12 +16,16 @@
     "body-parser": "^1.18.3",
     "bootstrap": "^4.3.1",
     "connected-react-router": "^6.3.1",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "history": "^4.7.2",
     "json-loader": "^0.5.7",
     "jsonwebtoken": "^8.5.0",
     "mongoose": "^5.4.16",
     "morgan": "^1.9.1",
+    "node-sessionstorage": "^1.0.0",
     "nodemon": "^1.18.10",
     "prop-types": "^15.7.2",
     "react": "^16.8.3",
@@ -29,7 +33,8 @@
     "react-dom": "^16.8.3",
     "react-router-dom": "^4.3.1",
     "react-spinners": "^0.5.3",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "sessionstorage": "^0.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",

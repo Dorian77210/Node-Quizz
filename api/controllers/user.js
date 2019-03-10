@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
 const User = require('../models/user');
 
 
@@ -74,26 +73,32 @@ exports.signin = (req, res, next) => {
             if(!user) {
                 //no users
                 return res.status(401).json({
-                    message: "Auth failed"
+                    message: "Auth failed",
+                    title: 'Auth failed'
                 });
             }
 
-            bcrypt.compare(password, user[0].password, (err, result) => {
+            user = user[0];
+            bcrypt.compare(password, user.password, (err, result) => {
                 if(err) {
                     return res.status(401).json({
+                        title: 'Invalid credentials',
                         message: "Invalid credentials"
                     });
                 }
 
                 if(result) {
                     const token = jwt.sign({
-                        email: user.email,
-                        userID: user._id
+                        _id: user._id,
+                        email: user.email
                     }, process.env.JWT_KEY, {
                         expiresIn: "2h"
                     });
 
+                    req.session.token = token;
+                    req.session.save();
                     return res.status(200).json({
+                        title: 'Auth successful',
                         message: "Auth successful",
                         token: token
                     });
@@ -102,7 +107,11 @@ exports.signin = (req, res, next) => {
             });
         })
         .catch(error => {
-            res.status(400).json({error : error});
+            return res.status(400).json({
+                error : error,
+                title: 'Server error',
+                message: 'Something was wrong...'
+            });
         });
 }
 

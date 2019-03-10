@@ -6,6 +6,15 @@ const quizzSchema = mongoose.Schema({
     resume: {
         type: String,
         required: true
+    },
+    createdAt: {
+        type: String,
+        default: new Date()
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 });
 

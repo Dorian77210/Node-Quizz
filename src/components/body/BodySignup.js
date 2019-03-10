@@ -113,7 +113,7 @@ class BodySignup extends React.Component {
              .catch(error => {
                  const modal = this.modalRef.current;
                  if(error.response) {
-                     const data = error.response.data;
+                    const data = error.response.data;
                     modal.setState({
                         show: true,
                         content: data.content,

@@ -2,8 +2,11 @@ const Quizz = require('../models/quizz');
 const mongoose = require('mongoose');
 // /quizz/
 exports.quizz_get_all = (req, res, next) => {
+    const user = req.user;
     Quizz.find()
         .select("name _id resume")
+        .where('user')
+        .equals(user._id)
         .exec()
         .then(doc => {
             const response = {
@@ -19,12 +22,13 @@ exports.quizz_get_all = (req, res, next) => {
                         }
                     }
                 })
-            }
-            res.status(200).json(response);
+            }   
+
+            return res.status(200).json(response);
         })
         .catch(error => {
             console.log(error);
-            res.status(500).json({ error: error });
+            return res.status(500).json({ error: error });
         });
 }
 
@@ -50,9 +54,9 @@ exports.quizz_get_one = (req, res, next) => {
                         }
                     }
                 }
-                res.status(200).json(response);
+                return res.status(200).json(response);
             } else {
-                res.status(404).json({ message: 'No entry for the quizz wanted' });
+                return res.status(404).json({ message: 'No entry for the quizz wanted' });
             }
         })
         .catch(error => console.log(error));
@@ -84,10 +88,10 @@ exports.quizz_creation = (req, res, next) => {
         })
         .catch(error => {
             console.log(error)
-            res.status(404).json({ error: error });
+            return res.status(404).json({ error: error });
         });
 
-    res.status(201).json({
+    return res.status(201).json({
         message: 'Create a quizz',
         createdQuizz: quizz
     });
@@ -115,11 +119,11 @@ exports.quizz_update = (req, res, next) => {
                     url: 'http://localhost/quizz/' + doc._id
                 }
             }
-            res.status(200).json(response);
+            return res.status(200).json(response);
         })
         .catch(error => {
             console.log(error);
-            req.status(500).json({
+            return req.status(500).json({
                 error: error
             });
         });
@@ -144,11 +148,11 @@ exports.quizz_delete = (req, res, next) => {
                 }
             }
 
-            res.status(201).json(response);
+            return res.status(201).json(response);
         })
         .catch(error => {
             console.log(error);
-            res.status(500).json({
+            return res.status(500).json({
                 message: 'Error during the deleting of the quizz',
                 error: error
             });

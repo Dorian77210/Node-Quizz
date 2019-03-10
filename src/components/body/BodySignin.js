@@ -6,6 +6,7 @@ import ErrorModal from '../modal/ErrorModal';
 
 import { css } from '@emotion/core';
 import { ClimbingBoxLoader } from 'react-spinners'; 
+import { Redirect } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -21,15 +22,40 @@ class BodySignin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false
+            loading: false,
         }
 
         this.submitForm = this.submitForm.bind(this);
         this.changeValue = this.changeValue.bind(this);
+
+        this.modalRef = React.createRef();
     }
 
     submitForm(event) {
         event.preventDefault();
+        const modal = this.modalRef.current;
+        const user = {
+            email: this.state.email,
+            password: this.state.password
+        };
+
+        this.setState( { loading: true } );
+        axios.post('/users/signin',user)
+             .then(res => {
+                this.setState( { loading: false} );
+                this.props.history.push('/users/quizz');
+            })
+             .catch(error => {
+                this.setState( { loading: false } );
+                if(error.response) {
+                    const data = error.response.data;
+                    modal.setState({
+                        title: data.title,
+                        content: data.message,
+                        show: true
+                    });
+                }
+             });
     }
 
     changeValue(key, event) {
@@ -74,6 +100,7 @@ class BodySignin extends React.Component {
                     />
                 </form>
             </div>
+
         );
     }
 }
