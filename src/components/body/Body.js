@@ -27,6 +27,7 @@ class Body extends React.Component {
         return (
             <div>
                 <Switch>
+                    <Route exact path="/" component={BodyHome}/>
                     <Route exact path="/home" component={BodyHome}/>
                     <Route exact path="/users/signup" component={BodySignup}/>
                     <Route exact path="/users/signin" component={BodySignin}/>
