@@ -7,6 +7,38 @@ const User = require('../models/user');
 exports.signup_get = (req, res, next) => {
     res.render('index');
 }
+
+exports.get_user_by_token = (req, res, next) => {
+    const userSession = req.user;
+    if(!userSession) {
+        return res.status(404).json({
+            title: 'Error when retrieving your profil',
+            content: 'Your session is invalid'
+        });
+    }
+
+    const _id = userSession._id;
+
+    // retrieve the user
+    User.findOne({ _id: _id }, (err, user) => {
+        if(err) {
+            return res.status(404).json({
+                title: 'Problem with your account',
+                message: 'An error was occurred during the retrieving of your profil. Please retry later'
+            });
+        }
+
+        return res.status(201).json({
+            user: {
+                pseudo: user.pseudo,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                createdAt: user.createdAt
+            }
+        });
+    })
+}
 exports.signup = (req, res, next) => {
     //check if the email is available
     User.where('email')
@@ -87,6 +119,7 @@ exports.signin = (req, res, next) => {
                     });
                 }
 
+
                 if(result) {
                     const token = jwt.sign({
                         _id: user._id,
@@ -103,6 +136,11 @@ exports.signin = (req, res, next) => {
                         token: token
                     });
                 }
+
+                return res.status(400).json({
+                    title: 'Auth failed',
+                    message: 'Invalid credentials'
+                });
 
             });
         })
@@ -132,14 +170,14 @@ exports.delete_user = (req, res, next) => {
 }
 
 exports.update_user = (req, res, next) => {
-    const userID = req.params.quizzID;
+    const userID = req.params.userID;
     const updatedOps = {};
 
     for(const op of req.body) {
         updatedOps[op] = op.value;
     }
 
-    Quizz.update({ _id: userID }, {
+    User.update({ _id: userID }, {
         $set: updatedOps
     }).exec()
       .then(doc => {

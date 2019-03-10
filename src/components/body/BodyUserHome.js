@@ -1,8 +1,10 @@
 import React from 'react';
 
-
 import { css } from '@emotion/core';
 import { ClimbingBoxLoader } from 'react-spinners'; 
+import ErrorModal from '../modal/ErrorModal';
+import AsideUserHome from '../aside/AsideUserHome';
+
 import axios from 'axios';
 
 const override = css`
@@ -18,8 +20,12 @@ class BodyUserHome extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true
+            loading: true,
+            canRender: false
         };
+
+        this.modalRef = React.createRef();
+        this.asideRef = React.createRef();
     }
 
     componentWillMount() {
@@ -31,34 +37,69 @@ class BodyUserHome extends React.Component {
                  const data = res.data;
                  if(data.count == 0) {
                      this.setState({
-                         quizz: 'No quizz available',
+                         quizzMessage: 'No quizz available',
                      });
                  } else {
                      this.setState({
-                         quizz: data.quizz
+                         quizzList: data.quizz
                      })
                  }
              })
              .catch(error => {
-
              });
     }
 
     componentDidMount() {
-       
+        this.setState({ loading: true } );
+        axios.get('/users/by-token')
+            .then(res => {
+                const user = res.data.user;
+                this.setState( {
+                    user: user,
+                    canRender: true
+                } );
+
+                this.setState({loading: false});
+
+            })
+            .catch(error => {
+                const modal = this.modalRef.current;
+                if(error.response) {
+                    const data = error.response.data;
+                    modal.setState({
+                        show: true,
+                        title: data.title,
+                        content: data.content
+                    });
+                }
+            });
     }
 
     render() {
         return (
-            <div className="container">
-                <ClimbingBoxLoader
-                css={override}
-                sizeUnit={"px"}
-                size={15}
-                color={'#123abc'}
-                loading={this.state.loading}
-            />
-            <h2 className="text-center">List of your quizz</h2>
+            <div>
+                {this.state.canRender && <AsideUserHome user={this.state.user}/> }
+                <div className="container">
+                    <ClimbingBoxLoader
+                    css={override}
+                    sizeUnit={"px"}
+                    size={15}
+                    color={'#123abc'}
+                    loading={this.state.loading}
+                />
+
+
+                <h2 className="text-center">List of your quizz</h2>
+                {this.state.quizzMessage &&
+                    <p className="text-center">{this.state.quizzMessage}</p>
+                }
+
+                <ErrorModal 
+                            content=""
+                            title=""
+                            ref={this.modalRef}
+                        />
+                </div>
             </div>
         );
     }

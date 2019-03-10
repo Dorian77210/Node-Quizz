@@ -20,7 +20,7 @@ class Body extends React.Component {
     }
 
     componentWillReceiveProps(nextProps){
-     }
+    }
 
 
     render() {
