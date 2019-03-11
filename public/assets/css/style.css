@@ -1,3 +1,12 @@
 .active-link {
     background: orange;
 }
+
+.fade-appear {
+    opacity: 0.001;
+}
+
+.fade-appear.fade-appear-active {
+    opacity: 1;
+    transition: opacity 5000ms ease-out;
+}

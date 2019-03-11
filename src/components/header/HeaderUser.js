@@ -5,6 +5,11 @@ class HeaderUser extends React.Component {
 
     constructor(props) {
         super(props);
+        this.logout = this.logout.bind(this);
+    }
+
+    logout() {
+
     }
 
     render() {
@@ -18,7 +23,7 @@ class HeaderUser extends React.Component {
                 >Home</NavLink>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mr-auto">
-                    <li className="nav-item">
+                        <li className="nav-item">
                             <NavLink
                             to="/users/quizz/create"
                             className="nav-link"
@@ -26,6 +31,15 @@ class HeaderUser extends React.Component {
                             activeClassName="active-link"
                             >Create a quizz
                             </NavLink>
+                        </li>
+
+                        <li className="navbar-brand">
+                            <NavLink 
+                                to="/users/logout"
+                                className="nav-link"
+                                exact={true}
+                                onClick={this.logout}
+                            >Logout</NavLink>
                         </li>
                     </ul>
                 </div>

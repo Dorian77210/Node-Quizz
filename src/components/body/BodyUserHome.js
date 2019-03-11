@@ -1,7 +1,9 @@
 import React from 'react';
 
 import { css } from '@emotion/core';
-import { ClimbingBoxLoader } from 'react-spinners'; 
+import { ClimbingBoxLoader } from 'react-spinners';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
+
 import ErrorModal from '../modal/ErrorModal';
 import AsideUserHome from '../aside/AsideUserHome';
 
@@ -78,7 +80,15 @@ class BodyUserHome extends React.Component {
     render() {
         return (
             <div>
-                {this.state.canRender && <AsideUserHome user={this.state.user}/> }
+                {this.state.canRender && 
+                    <CSSTransition 
+                        in={true}
+                        classNames="fade"
+                        appear={true}
+                        timeout={1500}>
+                        <AsideUserHome user={this.state.user}/>
+                    </CSSTransition>
+                }
                 <div className="container">
                     <ClimbingBoxLoader
                     css={override}
