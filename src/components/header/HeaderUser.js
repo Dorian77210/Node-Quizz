@@ -1,15 +1,38 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { ClimbingBoxLoader } from 'react-spinners';
+
+import ErrorModal from './../modal/ErrorModal';
+
+import axios from 'axios';
+
+const override = css`
+display: block;
+position: fixed;
+z-index: 1031;
+margin: 0 auto;
+top: 40vh;
+`;
 
 class HeaderUser extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            loading: true
+        }
+
         this.logout = this.logout.bind(this);
     }
 
     logout() {
+        axios.post('/users/logout')
+             .then(res => {
+                this.setState( { loading: false } )
+             }) 
+             .catch(error => {
 
+             });
     }
 
     render() {

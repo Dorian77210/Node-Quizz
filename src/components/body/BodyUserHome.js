@@ -31,11 +31,9 @@ class BodyUserHome extends React.Component {
     }
 
     componentWillMount() {
-
          //retrieve the quizzs
          axios.get('/users/quizz/')
              .then(res => {
-                 this.setState( {loading: false} );
                  const data = res.data;
                  if(data.count == 0) {
                      this.setState({
@@ -48,21 +46,17 @@ class BodyUserHome extends React.Component {
                  }
              })
              .catch(error => {
-             });
-    }
-
-    componentDidMount() {
-        this.setState({ loading: true } );
+             
+            });
+    
+        // profil
         axios.get('/users/by-token')
             .then(res => {
                 const user = res.data.user;
                 this.setState( {
                     user: user,
-                    canRender: true
+                    loading: false
                 } );
-
-                this.setState({loading: false});
-
             })
             .catch(error => {
                 const modal = this.modalRef.current;
@@ -75,20 +69,20 @@ class BodyUserHome extends React.Component {
                     });
                 }
             });
+        
+    }
+
+    componentDidMount() {
+
     }
 
     render() {
         return (
             <div>
-                {this.state.canRender && 
-                    <CSSTransition 
-                        in={true}
-                        classNames="fade"
-                        appear={true}
-                        timeout={1500}>
-                        <AsideUserHome user={this.state.user}/>
-                    </CSSTransition>
+                { !this.state.loading && 
+                <AsideUserHome user={this.state.user}/>
                 }
+
                 <div className="container">
                     <ClimbingBoxLoader
                     css={override}

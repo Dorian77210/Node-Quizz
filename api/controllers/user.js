@@ -8,6 +8,14 @@ exports.signup_get = (req, res, next) => {
     res.render('index');
 }
 
+// logout
+exports.logout = (req, req, next) => {
+    req.session.destroy()
+    return res.status(200).json({
+        message: 'Logout successful'
+    });
+}
+
 exports.get_user_by_token = (req, res, next) => {
     const userSession = req.user;
     if(!userSession) {
